@@ -1,0 +1,7 @@
+.lake/
+logs/
+*.olean
+*.ilean
+
+# agent tooling, not part of this project
+.agents/

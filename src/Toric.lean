@@ -1,0 +1,15 @@
+-- Root module for the reproduction, mirroring ~/Public/lean-toric/Toric.lean.
+--
+-- The reference root module is just a list of imports:
+--
+--     import Toric.MvLaurentPolynomial
+--     import Toric.SphericalVariety
+--     ...
+--
+-- Add one line per file you finish, working up the size-sorted list in
+-- README.md. Keep the order the same as the reference so `diff` stays useful:
+--
+--     diff -u ~/Public/lean-toric/Toric.lean src/Toric.lean
+--
+-- Individual modules live in src/Toric/ and import each other, exactly as in
+-- the reference tree.
