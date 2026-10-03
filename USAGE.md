@@ -1,5 +1,12 @@
 # USAGE
 
+## Start here
+
+```bash
+scripts/status.sh          # one screen: toolchain, build, exercise progress
+scripts/check.sh           # every exercise: how many holes are left
+```
+
 ## elan
 
 ```bash
@@ -45,6 +52,20 @@ keeps each range in `OUT.parts/` so an interrupted run resumes by re-running the
 same command, concatenates, and verifies length + sha256. Test it any time with
 `scripts/test_fetch.sh` (~2 MB, 15 assertions).
 
+## lake
+
+```bash
+lake update                     # fetch/re-resolve dependencies
+lake exe cache get              # download mathlib .olean cache (~440MB)
+lake build                      # builds src/Toric only
+lake build Toric.ToricVariety   # one module
+lake clean                      # drop build artifacts (keeps packages)
+```
+
+`.lake/packages` and `.lake/build` are symlinks to
+`/mnt/extra/lean/packages/lean-v4.34.1/` — see the table above.
+`lake clean` drops build artifacts but keeps packages.
+
 ## Where the big files go
 
 Every path under `/mnt/extra/lean` carries a version number, so you can keep
@@ -62,59 +83,58 @@ The package dir is keyed by Lean version, because that is what decides the
 package set: bumping `lean-toolchain` opens a fresh directory instead of mixing
 `.olean` files from two compilers. Full rules: `/mnt/extra/lean/README.md`.
 
-Re-create or re-point the links with:
-
 ```bash
 scripts/link_extra.sh            # follows ./lean-toolchain
 scripts/link_extra.sh v4.35.0    # point at a different version
 ```
 
-## lake
+## Checking your work
+
+`lake build` is slow because it builds the world. For one file, use:
 
 ```bash
-lake update                     # fetch/re-resolve dependencies
-lake exe cache get              # download mathlib .olean cache (~440MB)
-lake build                      # build the project
-lake build Toric.Defs           # build one target
-lake clean                      # drop build artifacts (keeps packages)
+scripts/check.sh exercise/01Rewriting.lean        # compile + hole count
+scripts/check.sh -v exercise/01Rewriting.lean     # list every remaining hole
+scripts/check.sh                                  # all exercises + total
 ```
 
-`.lake/packages` and `.lake/build` are symlinks to
-`/mnt/extra/lean/packages/lean-v4.34.1/` — see the table above.
-`lake clean` drops build artifacts but keeps packages.
+`scripts/check.sh` is `lake env lean <file>` plus a hole count. The counter
+(`scripts/holes.py`) blanks out comments and strings before looking for `sorry`,
+so a hint that mentions "sorry" in prose is not counted as a hole. It is a
+state machine across lines, because Lean's `/-!` doc comments span many lines.
 
-## Fast single-file check
+| output | meaning |
+|---|---|
+| `洞数` | `sorry` in code = proofs you still owe |
+| `声明数` | `example` / `theorem` / `lemma` in the file |
+| `待完成声明数` | declarations that own at least one hole |
 
-`lake build` is slow because it builds the world. For one file:
-
-```bash
-scripts/check.sh src/Toric/Defs.lean
-```
-
-which is just `lake env lean <file>` — sets `LEAN_PATH` and runs `lean` directly.
-Expect 1–5 s instead of minutes.
+Exit 0 = compiles, 1 = errors, 2 = bad usage.
 
 ## Scripts
 
 | script | what it does |
-|--------|--------------|
-| `link_extra.sh [v]` | (re)create the `/mnt/extra` symlinks for a Lean version. |
-| `setup_env.sh` | full setup: links + toolchain + `lake update` + cache + build. Re-runnable. |
-| `install_toolchain.sh [TC]` | download + unpack + `elan toolchain link`. `DRYRUN=1` to preview, `CONNS=32` for more connections. |
-| `fetch.sh URL OUT` | parallel chunked downloader (`--conns`, `--sha256`, `--size`). Resumable. |
-| `test_fetch.sh` | regression test for `fetch.sh`; downloads 2 MB and compares byte for byte. |
-| `scripts/smoke.sh` | checks the environment still works (`test/Smoke.lean`). |
-| `scripts/check.sh FILE` | fast compile of one file. |
-| `scripts/bg.sh [--name L] CMD...` | runs a long command in a **new herdr pane**, logs to `logs/`. |
-| `scripts/new_exercise.sh FILE [title]` | scaffold a file with the house rules. |
+|---|---|
+| `status.sh` | one-screen overview: toolchain, build, exercise progress, git, logs |
+| `check.sh [-v] [FILE...]` | the homework checker. Compiles and counts remaining proofs |
+| `setup_env.sh` | full setup: links + toolchain + `lake update` + cache + build. Re-runnable |
+| `smoke.sh` | checks the environment still works |
+| `new_exercise.sh FILE [title]` | scaffold a file in `exercise/` with the house rules |
+| `link_extra.sh [v]` | (re)create the `/mnt/extra` symlinks for a Lean version |
+| `install_toolchain.sh [TC]` | download + unpack + `elan toolchain link`. `DRYRUN=1` to preview |
+| `fetch.sh URL OUT` | parallel chunked downloader (`--conns`, `--sha256`, `--size`). Resumable |
+| `test_fetch.sh` | regression test for `fetch.sh`; downloads 2 MB and compares byte for byte |
+| `copy_reference.sh [-f] DIR` | copy a reference repo into `examples/`, skipping build junk |
+| `holes.py [-v] FILE` | the counter behind `check.sh`: holes / declarations / unfinished |
+| `bg.sh [--name L] CMD...` | run a long command in a **new herdr pane**, log to `logs/run/` |
 
 ## Background jobs (herdr)
 
-This repo sits inside [herdr](https://herdr.dev)-managed panes, so long jobs go
-in their own pane instead of blocking the one you are typing in.
+This repo sits inside herdr-managed panes, so long jobs go in their own pane
+instead of blocking the one you are typing in.
 
 ```bash
-scripts/bg.sh --name build lake build       # split right, run, log to logs/
+scripts/bg.sh --name build lake build       # split right, run, log to logs/run/
 herdr pane list                              # see all panes
 herdr pane read w2:p4                        # tail a pane without switching
 herdr pane close w2:p4
@@ -122,14 +142,21 @@ herdr pane close w2:p4
 
 Focus is left on the original pane, so a new job never steals your cursor.
 
-## Test / examples dirs
+## Reference material
 
-Neither is a `lean_lib`; run them directly:
+`examples/` holds read-only copies of reference repos. Do not edit them, and do
+not expect them to compile — they pin older mathlib versions.
 
 ```bash
-lake env lean examples/01Rewriting.lean
-lake env lean test/Smoke.lean
+scripts/copy_reference.sh ~/Public/lean-toric        # copy source, skip .lake/.git
+scripts/copy_reference.sh -f ~/Public/lean-GlimpseOfLean   # refresh
 ```
 
-- `examples/` — exercise statements carried over from GlimpseOfLean.
-- `test/` — scratch experiments I run to check an API or tactic.
+Then add a row to the table in `examples/README.md`.
+
+## Logs
+
+| dir | holds | git |
+|---|---|---|
+| `logs/run/` | setup, build, fetch, smoke output — machine generated | ignored |
+| `logs/dev/` | hand-written journal, dated markdown files | tracked |

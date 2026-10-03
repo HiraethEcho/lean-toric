@@ -16,7 +16,7 @@ if [ $# -eq 0 ]; then
   exit 2
 fi
 
-log="logs/$(date +%Y%m%d-%H%M%S)-$name.log"
+log="logs/run/$(date +%Y%m%d-%H%M%S)-$name.log"
 mkdir -p logs
 
 pane=$(herdr pane split --current --direction right --ratio 0.45 --cwd "$PWD" --no-focus \

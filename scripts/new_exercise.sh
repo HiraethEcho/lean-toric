@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
-# Scaffold a new exercise / experiment file with the house rules baked in.
-#   scripts/new_exercise.sh examples/Topics/RingTheory.lean "sample theorem"
+# Scaffold a new exercise file with the house rules baked in.
+#
+#   scripts/new_exercise.sh exercise/02Iff.lean "iff and propositional logic"
+#   scripts/new_exercise.sh exercise/Topics/RingTheory.lean
+#
+# The skeleton, the comment header, and the first 1-2 tactics of each proof are
+# yours to fill in. This script only creates the shell.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -12,6 +17,11 @@ if [ -z "$f" ]; then
   exit 2
 fi
 
+case "$f" in
+  exercise/*) ;;
+  *) echo "练习应该放在 exercise/ 下：$f" >&2; exit 2 ;;
+esac
+
 if [ -e "$f" ]; then
   echo "already exists: $f" >&2
   exit 1
@@ -22,14 +32,18 @@ mkdir -p "$(dirname "$f")"
 {
   echo "import Mathlib"
   echo
-  echo "-- $(basename "$f" .lean)${title:+ -- $title}"
+  echo "-- $(basename "$f" .lean)${title:+  — $title}"
   echo "--"
-  echo "-- TODO: statement goes here."
-  echo "-- Try: rewrite the goal into a known mathlib lemma, then apply it."
+  echo "-- 题目来源：examples/glimpseoflean/GlimpseOfLean/Exercises/"
+  echo "-- 对应的答案在 examples/glimpseoflean/GlimpseOfLean/Solutions/（最后才看）"
+  echo "-- 讲解见 notes/00-GlimpseOfLean.md"
+  echo
+  echo "/-- 第一个例子：先自己试，卡住了再往下看提示。 -/"
   echo "theorem exercise : 1 + 1 = 2 := by"
-  echo "  -- write the proof yourself; see notes/ for tactic recipes"
+  echo "  -- 你写证明。检查：scripts/check.sh $f"
   echo "  sorry"
 } > "$f"
 
 echo "created: $f"
 echo "check:   scripts/check.sh $f"
+echo "hint:    看 examples/glimpseoflean/GlimpseOfLean/Solutions/ 同名文件的第一题"

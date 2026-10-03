@@ -1,7 +1,10 @@
 .lake/
-logs/
 *.olean
 *.ilean
+
+# logs/run/ is machine output from setup, builds, fetches -- large and
+# reproducible. logs/dev/ is the hand-written journal and IS tracked.
+logs/run/
 
 # agent tooling, not part of this project
 .agents/

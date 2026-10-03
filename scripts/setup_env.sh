@@ -11,10 +11,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-mkdir -p logs
+mkdir -p logs/run logs/dev
 bash scripts/link_extra.sh
 
-LOG="logs/setup-$(date +%Y%m%d-%H%M%S).log"
+LOG="logs/run/setup-$(date +%Y%m%d-%H%M%S).log"
 exec > >(tee -a "$LOG") 2>&1
 
 echo "=== setup start $(date -Is) ==="
