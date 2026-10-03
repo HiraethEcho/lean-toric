@@ -126,11 +126,11 @@ mathlib v4.34.1（上游是 v4.27.0，落后 8 个 minor，tactic 行为可能�
 | `Introduction.lean` | 待搬 | 90 行，1 个完整证明，0 练习，纯演示 |
 | `Exercises/*.lean` | `exercise/NN*.lean` | **你写 proof** |
 | `Exercises/Topics/*.lean` | `exercise/Topics/` | 专题，按口味挑 |
-| `Solutions/*` | `examples/glimpseoflean/GlimpseOfLean/Solutions/` | 答案。卡住 30 分钟以上再看 |
+| `Solutions/*` | `examples/GlimpseOfLean/Solutions/` | 答案。卡住 30 分钟以上再看 |
 | `Library/*` | 也在 examples/ 里 | 见下面「关于 Library」 |
 | `tactics.pdf` | 本文附录 A | 翻译成了 Markdown 表格 |
 
-源码副本在 `examples/glimpseoflean/`（448 KB，只拷源码，不带 `.lake` / `.git`）。
+源码副本在 `examples/GlimpseOfLean/`（448 KB，只拷源码，不带 `.lake` / `.git`）。
 
 ## import 要改
 

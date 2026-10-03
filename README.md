@@ -12,7 +12,7 @@ practice, not an accident.
 
 | # | Phase | Source | Size |
 |---|-------|--------|------|
-| 1 | Learn the language | `examples/glimpseoflean` | 137 proofs to fill |
+| 1 | Learn the language | `examples/GlimpseOfLean` | 137 proofs to fill |
 | 2 | Reproduce `lean-toric` | `~/Public/lean-toric` | 18 files / 2050 lines |
 | 3 | Prove2Me mission | `~/Public/lean-prove2me-toric-foliation` | 1 definition + 5 theorems |
 

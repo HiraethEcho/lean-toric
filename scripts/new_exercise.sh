@@ -34,8 +34,8 @@ mkdir -p "$(dirname "$f")"
   echo
   echo "-- $(basename "$f" .lean)${title:+  — $title}"
   echo "--"
-  echo "-- 题目来源：examples/glimpseoflean/GlimpseOfLean/Exercises/"
-  echo "-- 对应的答案在 examples/glimpseoflean/GlimpseOfLean/Solutions/（最后才看）"
+  echo "-- 题目来源：examples/GlimpseOfLean/Exercises/"
+  echo "-- 对应的答案在 examples/GlimpseOfLean/Solutions/（最后才看）"
   echo "-- 讲解见 notes/00-GlimpseOfLean.md"
   echo
   echo "/-- 第一个例子：先自己试，卡住了再往下看提示。 -/"
@@ -46,4 +46,4 @@ mkdir -p "$(dirname "$f")"
 
 echo "created: $f"
 echo "check:   scripts/check.sh $f"
-echo "hint:    看 examples/glimpseoflean/GlimpseOfLean/Solutions/ 同名文件的第一题"
+echo "hint:    看 examples/GlimpseOfLean/Solutions/ 同名文件的第一题"
