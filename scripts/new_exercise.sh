@@ -34,7 +34,7 @@ mkdir -p "$(dirname "$f")"
   echo
   echo "-- $(basename "$f" .lean)${title:+  — $title}"
   echo "--"
-  echo "-- 题目来源：examples/GlimpseOfLean/Exercises/"
+  echo "-- 题目来源：references/GlimpseOfLean/Exercises/"
   echo "-- 对应的答案在 examples/GlimpseOfLean/Solutions/（最后才看）"
   echo "-- 讲解见 notes/00-GlimpseOfLean.md"
   echo

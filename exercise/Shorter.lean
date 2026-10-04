@@ -12,7 +12,7 @@ scripts/check.sh exercise/Shorter.lean
 scripts/check.sh -v exercise/Shorter.lean   # 列出每个还剩的洞
 ```
 
-题目原文：`examples/GlimpseOfLean/Exercises/Shorter.lean`
+题目原文：`references/GlimpseOfLean/Exercises/Shorter.lean`
 答案：`examples/GlimpseOfLean/Solutions/Shorter.lean`（最后才看）
 tactic 速查表：`notes/00-GlimpseOfLean.md` 附录 A
 

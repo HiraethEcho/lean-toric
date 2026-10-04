@@ -57,10 +57,12 @@ same command, concatenates, and verifies length + sha256. Test it any time with
 ```bash
 lake update                     # fetch/re-resolve dependencies
 lake exe cache get              # download mathlib .olean cache (~440MB)
-lake build                      # builds src/Toric only
-lake build Toric.ToricVariety   # one module
+lake build                      # nothing to build yet (no default target)
 lake clean                      # drop build artifacts (keeps packages)
 ```
+
+`exercise/` is deliberately outside the build: it holds `sorry`s. Check a file
+with `scripts/check.sh`, and the toolchain with `scripts/smoke.sh`.
 
 `.lake/packages` and `.lake/build` are symlinks to
 `/mnt/extra/lean/packages/lean-v4.34.1/` — see the table above.
@@ -124,7 +126,7 @@ Exit 0 = compiles, 1 = errors, 2 = bad usage.
 | `install_toolchain.sh [TC]` | download + unpack + `elan toolchain link`. `DRYRUN=1` to preview |
 | `fetch.sh URL OUT` | parallel chunked downloader (`--conns`, `--sha256`, `--size`). Resumable |
 | `test_fetch.sh` | regression test for `fetch.sh`; downloads 2 MB and compares byte for byte |
-| `copy_reference.sh [-f] DIR` | copy a reference repo into `examples/`, skipping build junk |
+| `copy_reference.sh [-f] DIR` | copy a reference repo into `references/`, skipping build junk |
 | `holes.py [-v] FILE` | the counter behind `check.sh`: holes / declarations / unfinished |
 | `bg.sh [--name L] CMD...` | run a long command in a **new herdr pane**, log to `logs/run/` |
 
@@ -142,17 +144,44 @@ herdr pane close w2:p4
 
 Focus is left on the original pane, so a new job never steals your cursor.
 
+Run `bg.sh` from outside herdr and it falls back to creating a whole workspace
+labelled `<repo>-<name>` — that is what happens when a plain shell or a
+non-herdr agent calls it.
+
 ## Reference material
 
-`examples/` holds read-only copies of reference repos. Do not edit them, and do
-not expect them to compile — they pin older mathlib versions.
+Two read-only shelves, never edited:
+
+| dir | holds | why |
+|---|---|---|
+| `examples/` | finished proofs: `GlimpseOfLean/Solutions` + its `Library/` | worked examples to imitate |
+| `references/` | upstream text: `GlimpseOfLean/Exercises`, `toric/Toric`, `toric/Toric.pdf` | skeletons come from here; `src/Toric/` diffs against here |
+
+Neither is expected to compile — they pin older mathlib versions. See
+`references/README.md` and `examples/README.md`.
 
 ```bash
 scripts/copy_reference.sh ~/Public/lean-toric        # copy source, skip .lake/.git
 scripts/copy_reference.sh -f ~/Public/lean-GlimpseOfLean   # refresh
 ```
 
-Then add a row to the table in `examples/README.md`.
+Then add a row to the table in `references/README.md`.
+
+### The toric blueprint PDF
+
+`references/toric/Toric.pdf` (30 pages, 144 KB) is our own build product. Only
+the PDF is kept — the blueprint's LaTeX source stays upstream. To regenerate:
+
+```bash
+cd ~/Public/lean-toric/blueprint/src && latexmk     # needs xelatex, writes ../print/print.pdf
+latexmk -C                                          # clean the aux files
+cp ~/Public/lean-toric/blueprint/print/print.pdf ~/Projects/lean/references/toric/Toric.pdf
+```
+
+The web version additionally needs the python packages `blueprint` and
+`plastex`, which are not installed here — so it is print-only.
+`scripts/copy_reference.sh -f` preserves any `*.pdf` in the destination, so a
+refresh never deletes this file.
 
 ## Logs
 

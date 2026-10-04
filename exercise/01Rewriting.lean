@@ -21,7 +21,7 @@ scripts/check.sh                               # 全部练习的进度
 
 填完把 `sorry` 换成真正的证明，"N 个待填证明" 会往下掉。
 
-题目原文：`examples/GlimpseOfLean/Exercises/01Rewriting.lean`
+题目原文：`references/GlimpseOfLean/Exercises/01Rewriting.lean`
 答案：`examples/GlimpseOfLean/Solutions/01Rewriting.lean`（最后才看）
 导读 + tactic 速查表：`notes/00-GlimpseOfLean.md`
 原文件的 import 依赖它自己的 `GlimpseOfLean.Library.Basic`，这里换成了 `import Mathlib`。

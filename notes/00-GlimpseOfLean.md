@@ -123,14 +123,15 @@ mathlib v4.34.1（上游是 v4.27.0，落后 8 个 minor，tactic 行为可能�
 
 | 上游 | 本仓库 | 说明 |
 |---|---|---|
-| `Introduction.lean` | 待搬 | 90 行，1 个完整证明，0 练习，纯演示 |
-| `Exercises/*.lean` | `exercise/NN*.lean` | **你写 proof** |
-| `Exercises/Topics/*.lean` | `exercise/Topics/` | 专题，按口味挑 |
+| `Introduction.lean` | `references/GlimpseOfLean/Introduction.lean` + `exercise/Introduction.lean` | 90 行，1 个完整证明，0 练习。副本已改成 `import Mathlib` 并能编译 |
+| `Exercises/*.lean` | 原文在 `references/GlimpseOfLean/Exercises/`，骨架在 `exercise/NN*.lean` | **你写 proof** |
+| `Exercises/Topics/*.lean` | `references/GlimpseOfLean/Exercises/Topics/` → `exercise/Topics/` | 专题，按口味挑。目前只铺了 `RingTheory` |
 | `Solutions/*` | `examples/GlimpseOfLean/Solutions/` | 答案。卡住 30 分钟以上再看 |
-| `Library/*` | 也在 examples/ 里 | 见下面「关于 Library」 |
+| `Library/*` | `examples/GlimpseOfLean/Library/` | 见下面「关于 Library」 |
 | `tactics.pdf` | 本文附录 A | 翻译成了 Markdown 表格 |
 
-源码副本在 `examples/GlimpseOfLean/`（448 KB，只拷源码，不带 `.lake` / `.git`）。
+题目原文在 `references/GlimpseOfLean/`，答案与 `Library/` 在
+`examples/GlimpseOfLean/`（共 448 KB，只拷源码，不带 `.lake` / `.git`）。
 
 ## import 要改
 
@@ -151,8 +152,8 @@ scripts/check.sh -v exercise/01Rewriting.lean   # 列出每个还剩的洞
 scripts/check.sh                               # 全部练习 + 总数
 ```
 
-比 `lake build` 快得多（1–5 秒 vs 几分钟）。`declaration uses 'sorry'`
-的警告一条条减少，就是进度。
+比 `lake build` 快得多（1–30 秒 vs 几分钟，`import Mathlib` 一份文件要十几秒）。
+`declaration uses 'sorry'` 的警告一条条减少，就是进度。
 
 ## 题目总量
 
@@ -177,13 +178,15 @@ scripts/check.sh                               # 全部练习 + 总数
 
 ## 关于 `Library/`
 
-上游的 `Library/` 是**教学补丁层**，不是正常写证明该用的东西：
+上游的 `Library/` 是**教学补丁层**，不是正常写证明该用的东西。它留在
+`examples/GlimpseOfLean/Library/`（`Solutions/` 的 import 需要它），但
+`exercise/` 一律不带过来：
 
-| 文件 | 干了什么 | 我们要不要 |
+| 文件 | 干了什么 | 我们的做法 |
 |---|---|---|
-| `Basic.lean` (78行) | 把 `ring` 改写成 `first \| ring1 \| ring_nf`；给 `min`/`max` 加 pretty-printer；补 mathlib 缺的引理 `ge_max_iff`、`abs_sub_le'`、`Finset.sum_univ_eq_single` | 不要 |
-| `Short.lean` (31行) | 同上的精简版，给 `Shorter.lean` 用 | 不要 |
-| `Ring.lean` (7行) | 一个 `setup` macro | 不要 |
+| `Basic.lean` (78行) | 把 `ring` 改写成 `first \| ring1 \| ring_nf`；给 `min`/`max` 加 pretty-printer；补 mathlib 缺的引理 `ge_max_iff`、`abs_sub_le'`、`Finset.sum_univ_eq_single` | `exercise/` 里用原版 `ring`；用到的引理内联进题目文件，并标明“不是题目” |
+| `Short.lean` (31行) | 同上的精简版，给 `Shorter.lean` 用 | 同上，`ge_max_iff` 内联在 `exercise/Shorter.lean` |
+| `Ring.lean` (7行) | 一个 `setup` macro | `setup` 内联在 `exercise/Topics/RingTheory.lean`，不挂 aesop 规则集后面证不动 |
 | `Probability.lean` (14行) | 一条 `ENNReal.mul_self_eq_self_iff` | 遇到再说 |
 
 其中被 `Library/Short.lean` 改写的 `ring` 值得留意：它**改变了 `ring`

@@ -12,7 +12,7 @@ scripts/check.sh exercise/02Iff.lean
 scripts/check.sh -v exercise/02Iff.lean   # 列出每个还剩的洞
 ```
 
-题目原文：`examples/GlimpseOfLean/Exercises/02Iff.lean`
+题目原文：`references/GlimpseOfLean/Exercises/02Iff.lean`
 答案：`examples/GlimpseOfLean/Solutions/02Iff.lean`（最后才看）
 tactic 速查表：`notes/00-GlimpseOfLean.md` 附录 A
 
@@ -285,6 +285,6 @@ example (a b : ℝ) : a = b ↔ b - a = 0 := by
 * `have` —— 正向推理：给中间结论起名
 * `constructor` —— 把 `↔`（以及 `∧`）拆成两半
 
-下一站：`examples/GlimpseOfLean/Exercises/03Forall.lean`。
+下一站：`references/GlimpseOfLean/Exercises/03Forall.lean`。
 要不要我照这个格式给你铺 03 的骨架，说一声。
 -/

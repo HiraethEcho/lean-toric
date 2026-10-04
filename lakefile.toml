@@ -1,5 +1,4 @@
 name = "leanlab"
-defaultTargets = ["Toric"]
 
 [leanOptions]
 autoImplicit = true
@@ -10,13 +9,17 @@ name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
 rev = "v4.34.1"
 
-# src/Toric/** mirrors examples/lean-toric (once copied) -- same relative paths,
-# so `diff -ru` against the reference stays meaningful.
+# exercise/, examples/ and references/ are NOT lean_libs on purpose: exercises
+# contain `sorry` while you work on them, and the other two are read-only
+# reference code (references/ can't compile at all -- upstream pins an older
+# toolchain). Check exercises with scripts/check.sh, which uses `lake env lean`.
 #
-# exercise/ and examples/ are NOT lean_libs on purpose: exercises contain
-# `sorry` while you work on them, and examples/ is read-only reference code.
-# Check those with scripts/check.sh instead, which uses `lake env lean`.
-[[lean_lib]]
-name = "Toric"
-srcDir = "src"
-globs = ["Toric"]
+# No lean_lib right now, so `lake build` only resolves the mathlib dependency.
+# Phase 2 (the lean-toric reproduction, see the README file table) re-adds:
+#
+#   defaultTargets = ["Toric"]
+#
+#   [[lean_lib]]
+#   name = "Toric"
+#   srcDir = "src"
+#   globs = ["Toric"]

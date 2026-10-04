@@ -19,8 +19,17 @@ fi
 log="logs/run/$(date +%Y%m%d-%H%M%S)-$name.log"
 mkdir -p logs
 
-pane=$(herdr pane split --current --direction right --ratio 0.45 --cwd "$PWD" --no-focus \
-        | grep -o '"pane_id":"[^"]*"' | head -1 | cut -d'"' -f4)
+if [ -n "${HERDR_PANE_ID:-}" ]; then
+  # Inside a herdr pane: split it, keep focus here.
+  pane=$(herdr pane split --current --direction right --ratio 0.45 --cwd "$PWD" --no-focus \
+          | grep -o '"pane_id":"[^"]*"' | head -1 | cut -d'"' -f4)
+else
+  # Launched from outside herdr (no current pane): make a workspace for this repo.
+  ws=$(herdr workspace create --cwd "$PWD" --label "$(basename "$PWD")-$name" --no-focus)
+  pane=$(printf '%s' "$ws" | grep -o '"pane_id":"[^"]*"' | head -1 | cut -d'"' -f4)
+fi
+
+[ -n "$pane" ] || { echo "could not get a herdr pane; run the command directly" >&2; exit 1; }
 
 herdr pane rename "$pane" "$name" >/dev/null
 

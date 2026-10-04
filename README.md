@@ -12,13 +12,13 @@ practice, not an accident.
 
 | # | Phase | Source | Size |
 |---|-------|--------|------|
-| 1 | Learn the language | `examples/GlimpseOfLean` | 137 proofs to fill |
-| 2 | Reproduce `lean-toric` | `~/Public/lean-toric` | 18 files / 2050 lines |
-| 3 | Prove2Me mission | `~/Public/lean-prove2me-toric-foliation` | 1 definition + 5 theorems |
+| 1 | Learn the language | `references/GlimpseOfLean/Exercises` + `examples/GlimpseOfLean/Solutions` | 137 proofs to fill |
+| 2 | Reproduce `lean-toric` | `references/toric/Toric` | 18 files / 2050 lines |
+| 3 | Prove2Me mission | `~/Public/lean-prove2me-toric-foliation` (not copied yet) | 1 definition + 5 theorems |
 
 Budget: ~2 h/day.
 
-**The full roadmap is [`examples/PLAN.md`](examples/PLAN.md)** — daily rhythm,
+**The full roadmap is [`PLAN.md`](PLAN.md)** — daily rhythm,
 per-file order with self-tests at the end of each phase, and the known pitfalls
 of each phase. Start there.
 
@@ -26,17 +26,22 @@ of each phase. Start there.
 
 ```
 exercise/     the student's exercises -- skeletons in, proofs out
-src/Toric/    the lean-toric reproduction, paths mirror the reference
-examples/     read-only copies of reference repos (see examples/README.md)
+src/Toric/    Phase 2, not created yet -- the lean-toric reproduction
+examples/     worked examples: GlimpseOfLean Solutions + its Library/ (read-only)
+references/   read-only upstream: exercise text, lean-toric source, its blueprint PDF
 notes/        knowledge worth keeping
+PLAN.md       the roadmap
 logs/run/     machine output from setup/builds (gitignored)
 logs/dev/     hand-written journal
 scripts/      helper scripts; scripts/tests/ holds the smoke test
 ```
 
-`exercise/`, `examples/` and `notes/` are **not** `lean_lib`s — exercises have
-`sorries` in them and examples are read-only, so neither belongs in the build.
-`lake build` only builds `src/`. To check a file use `scripts/check.sh`.
+`exercise/`, `examples/`, `references/` and `notes/` are **not** `lean_lib`s —
+exercises have `sorries` in them and the other two are read-only, so none of
+them belongs in the build. There is no `lean_lib` at all until Phase 2 lands,
+so `lake build` has nothing to do (it prints a "no default targets" warning).
+To check a file use `scripts/check.sh`; to check the toolchain use
+`scripts/smoke.sh`.
 
 ## Phase 1 order
 
@@ -45,7 +50,8 @@ file. Full table of hole counts and the Chinese guide: `notes/00-GlimpseOfLean.m
 
 ## Phase 2 file order (smallest first)
 
-`src/Toric/` mirrors the reference tree exactly, so `diff -ru` works.
+`src/Toric/` will mirror `references/toric/Toric/` exactly, so `diff -ru`
+works. The directory does not exist yet and `lakefile.toml` has no target for it.
 
 | # | File | lines |
 |---|------|-------|
@@ -74,7 +80,8 @@ file. Full table of hole counts and the Chinese guide: `notes/00-GlimpseOfLean.m
   the proof. I supply at most the first 1–2 tactics to show its shape.
 - `notes/` — knowledge you want to keep (tactic recipes, syntax, concepts).
 - `logs/dev/` — day-to-day journal of what happened.
-- `examples/` is reference material. Read it, never edit it.
+- `examples/` holds finished proofs to read. `references/` holds upstream text:
+  exercises, source trees, the blueprint PDF. Both are read-only — never edit them.
 - Big data and package caches live on `/mnt/extra/lean/`, version-keyed and
   symlinked in — see `USAGE.md` and `/mnt/extra/lean/README.md`.
 

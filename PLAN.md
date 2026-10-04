@@ -4,8 +4,8 @@
 
 | 阶段 | 材料 | 规模 | 预计 |
 |---|---|---|---|
-| 1 | `examples/glimpseoflean` | 137 个证明 | ~25 h |
-| 2 | `examples/lean-toric`（待拷） | 18 文件 / 2050 行 | ~30 h |
+| 1 | `references/GlimpseOfLean/Exercises` | 137 个证明 | ~25 h |
+| 2 | `references/toric/Toric` | 18 文件 / 2050 行 | ~30 h |
 | 3 | Prove2Me toric-foliation | 1 定义 + 5 定理 | ~15 h |
 
 合计约 70 h ≈ **35 天**（每阶段之间留缓冲）。
@@ -29,14 +29,14 @@ scripts/check.sh -v exercise/01Rewriting.lean
 
 C 段不能省。"我以为我会了"和"我能写出来"是两件事，只有 C 段能区分。
 
-**卡住超过 30 分钟**才准看 `examples/.../Solutions/`。看完必须在 `notes/`
+**卡住超过 30 分钟**才准看 `examples/GlimpseOfLean/Solutions/`。看完必须在 `notes/`
 写清楚卡在哪 —— 那条笔记比省下的 30 分钟值钱。
 
 ---
 
 # 阶段 1：GlimpseOfLean
 
-先把 `examples/glimpseoflean/GlimpseOfLean/Introduction.lean` 读完（90 行，
+先把 `references/GlimpseOfLean/Introduction.lean` 读完（90 行，
 1 个完整证明，**不用打字**）。它讲的是 proof state 长什么样：`⊢` 右边是目标，
 上面是变量和假设；每写一行 tactic，面板就变一次。
 
@@ -83,20 +83,22 @@ C 段不能省。"我以为我会了"和"我能写出来"是两件事，只有 C
 
 # 阶段 2：复现 lean-toric
 
-先拷参考代码：
+参考代码已经在 `references/toric/Toric/`（18 文件）+ `references/toric/Toric.lean`
+（模块地图），blueprint 只留了编译好的 `references/toric/Toric.pdf`（30 页，
+LaTeX 源码没拿过来，在上游）。要刷新副本才需要跑：
 
 ```bash
-scripts/copy_reference.sh ~/Public/lean-toric
+scripts/copy_reference.sh -f ~/Public/lean-toric Toric Toric.lean
 ```
 
-在 `examples/README.md` 的表里加一行。
+刷新后在 `references/README.md` 的表里改日期。
 
 ## 做法
 
 `src/Toric/` 的路径跟参考树**一一对应**，所以：
 
 ```bash
-diff -ru ~/Public/lean-toric/Toric src/Toric
+diff -ru references/toric/Toric src/Toric
 ```
 
 这条命令的正确输出是**只有注释的差异**。代码不同就是写错了。
@@ -148,7 +150,7 @@ diff -ru ~/Public/lean-toric/Toric src/Toric
 
 # 阶段 3：Prove2Me 实战
 
-材料在 `~/Public/lean-prove2me-toric-foliation/`（不在 git 里，需要时拷进 `examples/`）。
+材料在 `~/Public/lean-prove2me-toric-foliation/`（不在 git 里，需要时拷进 `references/`）。
 
 Fujino–Sato《A remark on toric foliations》定理 1.3。
 **这题在文献里已经证过了** —— 这里是形式化，不是出新数学。
