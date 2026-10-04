@@ -5,6 +5,7 @@
 参考 ~/Public/lean-GlimpseOfLean/
 目标 复现 ~/Public/lean-toric/
 检查 ~/Public/lean-prove2me-toric-foliation/ 的内容
+
 ## layout
 
 ├── AGENTS.md
@@ -18,13 +19,10 @@
 
 ## rule
 
-only write comments in src/ , teach me to write the codes by myself.
+only write comments, teach me to write the codes by myself.
 
 big files (data, model) stored in /mnt/extra.
 
-talk in chinese and english, but write code in english. keep the terms in english.
 make it consice, do not write too much, only write the necessary.
 
 lanuch code in another herdr panel, do not block the main panel.
-
-

@@ -8,3 +8,5 @@ logs/run/
 
 # agent tooling, not part of this project
 .agents/
+/.pi
+__pycache__
