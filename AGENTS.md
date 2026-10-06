@@ -35,7 +35,7 @@ README.md     for humans      USAGE.md for commands      PLAN.md for the roadmap
 | path | what |
 |---|---|
 | `exercise/` | their exercises, `sorry` holes to fill |
-| `src/Toric/` | the `lean-toric` reproduction, mirrors `references/toric/Toric/` (Phase 2 — does not exist yet) |
+| `src/Toric/` | the `lean-toric` reproduction, mirrors `references/toric/Toric/` (Phase 2 — does not exist yet). This is a *hand-typing* exercise: a machine-copied, already-compiling version exists in the sibling project repo, so do not treat copying as the exercise. See "Not this repo" below |
 | `examples/GlimpseOfLean/Solutions/` | full answers. Look only after 30 minutes stuck |
 | `examples/GlimpseOfLean/Library/` | the upstream teaching-patch layer `Solutions/` imports |
 | `references/GlimpseOfLean/Exercises/` | exercise text, `sorry` version — where the skeletons come from |
@@ -47,6 +47,24 @@ README.md     for humans      USAGE.md for commands      PLAN.md for the roadmap
 | `scripts/` | helpers |
 
 Neither `exercise/`, `examples/` nor `references/` is a `lean_lib`: exercises
-carry `sorry`s and the other two are read-only. `references/toric/Toric/` cannot
-compile here at all — upstream is toolchain `v4.34.0-rc2` + mathlib `62d0e07`,
-this repo is `v4.34.1` + mathlib `v4.34.1`. Read it, do not build it.
+carry `sorry`s and the other two are read-only.
+
+Correction to what this file used to say: `references/toric/Toric/` **does** compile
+here. It claimed it "cannot compile here at all" because upstream pins toolchain
+`v4.34.0-rc2` + mathlib `62d0e07` while this repo is `v4.34.1`. The pin difference is
+real; the conclusion was not. All 19 modules build with zero errors and zero
+deprecation warnings across that 119-commit mathlib gap. Reproducible, and recorded
+in `~/Projects/lean-toric/logs/dev/2026-10-07.md`. It stays read-only here: it is the
+Phase 2 comparison object.
+
+## Not this repo
+
+The **formalization project** is a sibling worktree of the same git repository:
+`~/Projects/lean-toric`, branch `toric`. It holds the `ToricFan/` library, the `spec/`
+contract, and the optional `Toric` lib built from `references/toric`. `main` (here) is
+the curriculum, and the `toric` branch no longer carries it — the two trees are
+disjoint by design.
+
+Exercises, GlimpseOfLean and the Phase 1–3 study plan go here. New theorems, fan
+combinatorics, and anything that must satisfy `spec/SPEC.md` §4 go there. Do not merge
+`toric` into `main`.
